@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARCELO y MARU Cuestionario 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        .radio-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+        .question-row:nth-child(even) { background-color: #f9fafb; }
+        .question-row:hover { background-color: #f3f4f6; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-2 md:p-6 font-sans text-gray-900">
+    <div class="max-w-2xl mx-auto bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-200">
+        <!-- Encabezado -->
+        <div class="bg-indigo-700 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold uppercase tracking-widest">MARCELO y MARU</h1>
+            <p class="text-indigo-100 text-sm mt-1">Cuestionario para Analizar la Relación de Pareja</p>
+        </div>
+
+        <div id="quiz-container">
+            <form id="quiz-form">
+                <div class="p-4 bg-gray-50 border-b border-gray-200">
+                    <h2 class="text-lg font-bold text-gray-800">Parte 1: Intereses, Personalidad y Expectativas</h2>
+                </div>
+                <div id="section-1"></div>
+
+                <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
+                    <h2 class="text-lg font-bold text-gray-800">Parte 2: Comunicación y Emociones</h2>
+                </div>
+                <div id="section-2"></div>
+
+                <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
+                    <h2 class="text-lg font-bold text-gray-800">Parte 3: Finanzas, Religión y Convivencia</h2>
+                </div>
+                <div id="section-3"></div>
+
+                <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
+                    <h2 class="text-lg font-bold text-gray-800">Parte 4: Futuro y Compromiso</h2>
+                </div>
+                <div id="section-4"></div>
+
+                <div class="p-8 bg-gray-50 border-t border-gray-200">
+                    <button type="button" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg shadow-md transition duration-300 transform active:scale-95 text-lg">
+                        FINALIZAR Y ENVIAR REVISIÓN
+                    </button>
+                    <p class="text-center text-xs text-gray-500 mt-4 italic">Copia a: erwinborquez.pastor@gmail.com</p>
+                </div>
+            </form>
+        </div>
+
+        <!-- Pantalla de Éxito -->
+        <div id="success-screen" class="hidden p-6 md:p-12 text-center">
+            <div class="mb-4 inline-flex items-center justify-center w-20 h-20 bg-green-100 text-green-600 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">¡Enviado con Éxito!</h2>
+            <p class="text-gray-600 mb-6">Tus 82 respuestas han sido enviadas correctamente al Pastor.</p>
+            <button onclick="location.reload()" class="bg-indigo-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-indigo-700 transition">Reiniciar Cuestionario</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de EmailJS
+        const EMAILJS_PUBLIC_KEY = "_U0Ot3H7izrQwZRlv";
+        const EMAILJS_TEMPLATE_ID = "template_0ggw04o";
+        const EMAILJS_SERVICE_ID = "service_9pb3ug4"; 
+
+        const sectionsData = [
+            { id: 1, title: "Intereses, Personalidad y Expectativas", questions: ["Mi futura pareja y yo tenemos muchos intereses en común.", "Mi pareja debe dejar algunos de sus hábitos.", "Existen personas que se oponen a nuestros planes de casarnos.", "Ambos tenemos el mismo horario de lucidez.", "He crecido con una idea positiva de la sexualidad.", "Mi pareja conoce mis sueños.", "El apoyo económico de padres produciría problemas.", "Hemos hablado sobre no poder tener hijos.", "Mi pareja administra bien el dinero.", "La fe ha causado problemas familiares.", "La política produce tensiones.", "Su conducta en público me molesta.", "Hay presión por casarnos pronto.", "Mi pareja sabe escuchar.", "Libertad para hablar de temas sexuales.", "Me siento valorado/a.", "El contacto con suegros me estresa.", "Quisiera tener hijos.", "Confío plenamente en su fidelidad.", "Siento que me oculta cosas.", "Claridad sobre disciplina de hijos."] },
+            { id: 2, title: "Comunicación y Emociones", questions: ["Me molesta cómo gasta su dinero.", "Depende demasiado de sus padres.", "Nuestras familias son similares.", "Seguridad expresando mis miedos.", "Mi pareja es muy crítica.", "Misma visión de ahorro.", "Miedo a perder independencia.", "Es una persona paciente.", "Dudas sobre compatibilidad.", "Interés genuino en mis estudios/trabajo.", "Discusión sobre dónde vivir.", "Me gusta cómo trata a los demás.", "Apoyo en mis metas.", "Miedo a su temperamento.", "Mismas creencias de fe.", "Comodidad con sus amigos.", "Toma decisiones sin consultar.", "Hay equilibrio en la relación.", "Influencia de sus amigos.", "Acuerdo en frecuencia sexual."] },
+            { id: 3, title: "Finanzas, Religión y Convivencia", questions: ["Acuerdo en quién administra el dinero.", "Vistas religiosas difieren.", "Respeto a mis pasatiempos.", "Tiene prejuicios frente a otros.", "Presión para casarme.", "Uno siempre quiere tener la razón.", "Necesidades sexuales diferentes.", "Estrés por su trabajo.", "Parientes producen peleas.", "Hablamos cuántos hijos tener.", "Acuerdo en presupuesto.", "Comodidad en mi iglesia.", "Incomodidad con sus hobbies.", "Preocupación por su salud/estabilidad.", "Dudas sobre mi atractivo físico.", "Dificultad en expresar sentimientos.", "Dudas sobre expectativas sexuales.", "Compartir trabajos de casa.", "Familia alegre con mi elección.", "Es detallista y cariñosa."] },
+            { id: 4, title: "Futuro y Compromiso", questions: ["Me escucha pero no me entiende.", "Me preocupa que gaste mucho.", "Comunicación mejora tras discusión.", "Orgullo de presentarlo/a.", "Es egoísta en ocasiones.", "Planes claros para el hogar.", "Respeta mi espacio.", "Relación con su ex.", "Es mi mejor amigo/a.", "Diferimos en la forma de celebrar fechas importantes.", "Es responsable.", "No soy su prioridad.", "Acuerdo en manejo de deudas.", "Me gusta su humor.", "Es muy celoso/a.", "Mismos valores morales.", "Preocupación por su higiene.", "Superaremos obstáculos juntos.", "Me motiva a ser mejor.", "Intenta cambiarme.", "Convicción total de casarme."] }
+        ];
+
+        let globalCounter = 1;
+
+        function renderQuestions() {
+            sectionsData.forEach(section => {
+                const container = document.getElementById(`section-${section.id}`);
+                section.questions.forEach(text => {
+                    const qId = globalCounter;
+                    const div = document.createElement('div');
+                    div.className = "question-row flex flex-col md:flex-row md:items-center justify-between p-4 border-b border-gray-100 gap-3";
+                    div.innerHTML = `
+                        <div class="flex-1 pr-4">
+                            <span class="font-bold text-gray-700 mr-1">${qId}.</span>
+                            <span class="text-gray-800 text-[14px] font-medium leading-tight">${text}</span>
+                        </div>
+                        <div class="flex items-center gap-4 shrink-0">
+                            <label class="flex items-center gap-1 cursor-pointer text-xs"><input type="radio" name="q${qId}" value="Si" class="radio-custom" required> Sí</label>
+                            <label class="flex items-center gap-1 cursor-pointer text-xs"><input type="radio" name="q${qId}" value="No se" class="radio-custom"> No sé</label>
+                            <label class="flex items-center gap-1 cursor-pointer text-xs"><input type="radio" name="q${qId}" value="No" class="radio-custom"> No</label>
+                        </div>`;
+                    container.appendChild(div);
+                    globalCounter++;
+                });
+            });
+        }
+
+        window.onload = () => {
+            renderQuestions();
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+        };
+
+        document.getElementById('submit-btn').addEventListener('click', async function() {
+            const formData = new FormData(document.getElementById('quiz-form'));
+            const responses = {};
+            let count = 0;
+            for (let [key, value] of formData.entries()) { responses[key] = value; count++; }
+
+            if (count < 82) {
+                alert(`Has respondido ${count} de 82 preguntas. Por favor, completa todo el cuestionario.`);
+                return;
+            }
+
+            this.disabled = true;
+            this.innerHTML = "ENVIANDO REVISIÓN...";
+
+            let msg = "INFORME DE RESPUESTAS - MARCELO Y MARU (82 PREGUNTAS)\n\n";
+            let currentQ = 1;
+            sectionsData.forEach(section => {
+                msg += `--- ${section.title.toUpperCase()} ---\n`;
+                section.questions.forEach(qText => {
+                    msg += `${currentQ}. ${qText}: ${responses['q'+currentQ]}\n`;
+                    currentQ++;
+                });
+                msg += "\n";
+            });
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                from_name: "Marcelo y Maru",
+                message: msg,
+                to_email: "erwinborquez.pastor@gmail.com"
+            }).then(() => {
+                document.getElementById('quiz-container').classList.add('hidden');
+                document.getElementById('success-screen').classList.remove('hidden');
+                window.scrollTo(0,0);
+            }).catch(err => {
+                console.error("Error:", err);
+                alert("Hubo un error al enviar. Intenta de nuevo.");
+                this.disabled = false;
+                this.innerHTML = "FINALIZAR Y ENVIAR REVISIÓN";
+            });
+        });
+    </script>
+</body>
+</html>
