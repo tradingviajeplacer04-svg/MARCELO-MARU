@@ -12,17 +12,13 @@
             height: 1.25rem;
             cursor: pointer;
         }
-        .question-row:nth-child(even) {
-            background-color: #f9fafb;
-        }
-        .question-row:hover {
-            background-color: #f3f4f6;
-        }
+        .question-row:nth-child(even) { background-color: #f9fafb; }
+        .question-row:hover { background-color: #f3f4f6; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen p-2 md:p-6 font-sans text-gray-900">
     <div class="max-w-2xl mx-auto bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-200">
-        <!-- Encabezado -->
+        <!-- Header -->
         <div class="bg-indigo-700 p-6 text-white text-center">
             <h1 class="text-2xl font-bold uppercase tracking-widest">MARCELO y MARU</h1>
             <p class="text-indigo-100 text-sm mt-1">Cuestionario para Analizar la Relación de Pareja</p>
@@ -30,159 +26,54 @@
 
         <div id="quiz-container">
             <form id="quiz-form">
-                
-                <!-- Parte 1 -->
                 <div class="p-4 bg-gray-50 border-b border-gray-200">
                     <h2 class="text-lg font-bold text-gray-800">Parte 1: Intereses, Personalidad y Expectativas</h2>
                 </div>
                 <div id="section-1"></div>
 
-                <!-- Parte 2 -->
                 <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
-                    <h2 class="text-lg font-bold text-gray-800">Parte 2: Comunicación y Emociones</h2>
+                    <h2 class="text-lg font-bold text-gray-800">Parte 2: Finanzas, Religión y Convivencia</h2>
                 </div>
                 <div id="section-2"></div>
 
-                <!-- Parte 3 -->
                 <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
-                    <h2 class="text-lg font-bold text-gray-800">Parte 3: Finanzas, Religión y Convivencia</h2>
+                    <h2 class="text-lg font-bold text-gray-800">Parte 3: Comunicación y Futuro</h2>
                 </div>
                 <div id="section-3"></div>
-
-                <!-- Parte 4 -->
-                <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
-                    <h2 class="text-lg font-bold text-gray-800">Parte 4: Futuro y Compromiso</h2>
-                </div>
-                <div id="section-4"></div>
 
                 <div class="p-8 bg-gray-50 border-t border-gray-200">
                     <button type="button" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg shadow-md transition duration-300 transform active:scale-95 text-lg">
                         FINALIZAR Y ENVIAR REVISIÓN
                     </button>
-                    <p class="text-center text-xs text-gray-500 mt-4 italic">Se enviará copia a erwinborquez.pastor@gmail.com</p>
+                    <p class="text-center text-xs text-gray-500 mt-4 italic">Copia a: erwinborquez.pastor@gmail.com</p>
                 </div>
             </form>
         </div>
 
-        <!-- Pantalla de éxito -->
-        <div id="success-screen" class="hidden p-16 text-center">
-            <div class="mb-6 inline-flex items-center justify-center w-24 h-24 bg-green-100 text-green-600 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <div id="success-screen" class="hidden p-6 md:p-12 text-center">
+            <div class="mb-4 inline-flex items-center justify-center w-20 h-20 bg-green-100 text-green-600 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                 </svg>
             </div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">¡Enviado!</h2>
-            <p class="text-gray-600 mb-8 text-lg">Tus respuestas han sido procesadas correctamente.</p>
-            <button onclick="location.reload()" class="bg-indigo-600 text-white px-10 py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg">
-                Volver a empezar
-            </button>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">¡Enviado con Éxito!</h2>
+            <p class="text-gray-600 mb-6">Tus respuestas han sido enviadas correctamente al Pastor.</p>
+            <button onclick="location.reload()" class="bg-indigo-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-indigo-700 transition">Reiniciar Cuestionario</button>
         </div>
     </div>
 
     <script>
+        // ============================================================
+        // CONFIGURACIÓN DE EMAILJS - ACTUALIZADA POR GEMINI
+        // ============================================================
+        const EMAILJS_PUBLIC_KEY = "_U0Ot3H7izrQwZRlv";
+        const EMAILJS_TEMPLATE_ID = "template_0ggw04o";
+        const EMAILJS_SERVICE_ID = "service_9pb3ug4"; 
+
         const sectionsData = [
-            {
-                id: 1,
-                questions: [
-                    "Mi futura pareja y yo tenemos muchos intereses en común.",
-                    "Mi pareja debe dejar algunos de sus hábitos.",
-                    "Existen personas que se oponen a nuestros planes de casarnos.",
-                    "Ambos tenemos el mismo horario de lucidez (nocturnos o madrugadores).",
-                    "He crecido con una idea favorable y positiva de la sexualidad.",
-                    "Mi pareja conoce mis sueños y metas de vida.",
-                    "El apoyo económico de padres o suegros produciría problemas.",
-                    "Hemos hablado sobre qué implicaría no poder tener hijos.",
-                    "Mi futura pareja administra bien el dinero.",
-                    "El hecho de que mi pareja no pertenezca a una iglesia evangélica ha causado problemas en mi familia.",
-                    "Nuestros puntos de vista sobre política producen tensiones.",
-                    "La manera como mi pareja se conduce en público me causa molestias.",
-                    "Han surgido dificultades porque mi pareja se quiere casar antes que yo.",
-                    "Mi pareja sabe escuchar atentamente.",
-                    "Siento libertad de conversar sobre temas sexuales (fantasías, etc.).",
-                    "Siento que mi pareja me valora y toma en serio mis puntos de vista.",
-                    "La exigencia de contacto de mis padres/suegros me estresa.",
-                    "Posteriormente quisiera tener hijos.",
-                    "Confío plenamente en la fidelidad de mi pareja.",
-                    "A veces siento que mi pareja me oculta cosas importantes.",
-                    "Tenemos claridad sobre cómo se disciplinarán los hijos."
-                ]
-            },
-            {
-                id: 2,
-                questions: [
-                    "Me molesta la forma en que mi pareja gasta el dinero en sí mismo/a.",
-                    "Creo que mi pareja depende demasiado de sus padres.",
-                    "Nuestras familias de origen son muy similares en costumbres.",
-                    "Me siento seguro/a expresando mis miedos a mi pareja.",
-                    "Mi pareja tiende a ser muy crítico/a conmigo.",
-                    "Compartimos la misma visión sobre el ahorro a largo plazo.",
-                    "Me asusta la idea de perder mi independencia al casarme.",
-                    "Considero que mi pareja es una persona paciente.",
-                    "A veces dudo de si realmente somos compatibles.",
-                    "Mi pareja muestra interés genuino por mi trabajo/estudios.",
-                    "Hemos discutido dónde viviremos después de casarnos.",
-                    "Me gusta la forma en que mi pareja trata a los demás.",
-                    "Siento que mi pareja me apoya en mis metas personales.",
-                    "Me preocupa el temperamento de mi pareja cuando se enoja.",
-                    "Tenemos las mismas creencias fundamentales sobre la fe.",
-                    "Me siento cómodo/a con los amigos de mi pareja.",
-                    "Mi pareja suele tomar decisiones sin consultarme.",
-                    "Siento que hay un equilibrio en nuestra relación.",
-                    "Me preocupa la influencia que sus amigos tienen sobre él/ella.",
-                    "Estamos de acuerdo en la frecuencia de las relaciones sexuales."
-                ]
-            },
-            {
-                id: 3,
-                questions: [
-                    "Hemos acordado quién va a administrar las finanzas.",
-                    "Nuestros puntos de vista religiosos difieren bastante.",
-                    "Mi pareja respeta mi deseo de seguir con mis pasatiempos privados.",
-                    "Tengo la impresión de que mi pareja tiene prejuicios frente a otros.",
-                    "Me siento presionado/a para casarme.",
-                    "Uno de nosotros tiene la tendencia de querer tener siempre la razón.",
-                    "Nuestras necesidades sexuales son muy diferentes.",
-                    "Me estresan las obligaciones laborales de mi pareja.",
-                    "Me preocupa que algún pariente produzca peleas entre nosotros.",
-                    "Hemos hablado cuántos hijos queremos tener.",
-                    "Nos hemos puesto de acuerdo en cómo administrar el dinero (presupuesto).",
-                    "Me siento como en casa en mi iglesia y me gusta colaborar.",
-                    "Siento incomodidad por los pasatiempos de mi pareja.",
-                    "Me preocupa la salud física o estabilidad emocional de uno de nosotros.",
-                    "No estoy seguro/a de si soy suficientemente atractivo/a para mi pareja.",
-                    "Tengo dificultad en expresar mis sentimientos más profundos.",
-                    "Me pregunto si podré suplir las expectativas sexuales de mi pareja.",
-                    "Acordamos compartir todos los trabajos de casa.",
-                    "Mi familia está alegre con la pareja que elegí.",
-                    "Mi pareja es detallista y cariñosa."
-                ]
-            },
-            {
-                id: 4,
-                questions: [
-                    "Siento que mi pareja me escucha pero no me entiende.",
-                    "Me preocupa que mi pareja sea demasiado gastador/a.",
-                    "Nuestra comunicación mejora después de una discusión.",
-                    "Me siento orgulloso/a de presentar a mi pareja ante otros.",
-                    "Creo que mi pareja es muy egoísta en ocasiones.",
-                    "Tenemos planes claros para nuestro futuro hogar.",
-                    "Mi pareja respeta mi espacio personal.",
-                    "Me preocupa la relación de mi pareja con su ex (si aplica).",
-                    "Siento que mi pareja es mi mejor amigo/a.",
-                    "Diferimos en la forma de celebrar fechas importantes.",
-                    "Mi pareja es muy responsable con sus compromisos.",
-                    "A veces siento que no soy la prioridad de mi pareja.",
-                    "Estamos de acuerdo en cómo manejar las deudas.",
-                    "Me gusta el sentido del humor de mi pareja.",
-                    "Siento que mi pareja es muy celosa.",
-                    "Tenemos los mismos valores morales.",
-                    "Me preocupa la higiene o cuidado personal de mi pareja.",
-                    "Siento que podemos superar cualquier obstáculo juntos.",
-                    "Mi pareja me motiva a ser una mejor persona.",
-                    "A veces siento que mi pareja intenta cambiarme.",
-                    "Estoy completamente convencido/a de casarme."
-                ]
-            }
+            { id: 1, title: "Intereses y Personalidad", questions: ["Mi futura pareja y yo tenemos muchos intereses en común.", "Mi pareja debe dejar algunos de sus hábitos.", "Existen personas que se oponen a nuestros planes de casarnos.", "Ambos tenemos el mismo horario de lucidez (nocturnos o madrugadores).", "He crecido con una idea favorable y positiva de la sexualidad.", "Mi pareja conoce mis sueños y metas de vida.", "El apoyo económico de padres o suegros produciría problemas.", "Hemos hablado sobre qué implicaría no poder tener hijos.", "Mi futura pareja administra bien el dinero.", "El hecho de que mi pareja no pertenezca a una iglesia evangélica ha causado problemas en mi familia.", "Nuestros puntos de vista sobre política producen tensiones.", "La manera como mi pareja se conduce en público me causa molestias.", "Han surgido dificultades porque mi pareja se quiere casar antes que yo.", "Mi pareja sabe escuchar atentamente.", "Siento libertad de conversar sobre temas sexuales (fantasías, etc.).", "Siento que mi pareja me valora y toma en serio mis puntos de vista.", "La exigencia de contacto con mis padres/suegros me estresa.", "Posteriormente quisiera tener hijos."] },
+            { id: 2, title: "Finanzas y Convivencia", questions: ["Hemos acordado quién va a administrar las finanzas.", "Nuestros puntos de vista religiosos difieren bastante.", "Mi pareja respeta mi deseo de seguir con mis pasatiempos privados.", "Tengo la impresión de que mi pareja tiene prejuicios frente a otros.", "Me siento presionado/a para casarme.", "Uno de nosotros tiene la tendencia de querer tener siempre la razón.", "Nuestras necesidades sexuales son muy diferentes.", "Me estresan las obligaciones laborales de mi pareja.", "Me preocupa que algún pariente produzca peleas entre nosotros.", "Hemos hablado cuántos hijos queremos tener.", "Nos hemos puesto de acuerdo en cómo administrar el dinero (presupuesto).", "Me siento como en casa en mi iglesia y me gusta colaborar.", "Siento incomodidad por los pasatiempos de mi pareja.", "Me preocupa la salud física o estabilidad emocional de uno de nosotros.", "No estoy seguro/a de si soy suficientemente atractivo/a para mi pareja.", "Tengo dificultad en expresar mis sentimientos más profundos.", "Me pregunto si podré suplir las expectativas sexuales de mi pareja.", "Acordamos compartir todos los trabajos de casa.", "Mi familia está alegre con la pareja que elegí."] },
+            { id: 3, title: "Preguntas Adicionales", questions: ["Mi pareja me escucha pero siento que no me entiende.", "Me preocupa que mi pareja gaste demasiado dinero.", "Nuestra comunicación tiende a mejorar después de una discusión.", "Me siento orgulloso/a de presentar a mi pareja ante otros.", "Mi pareja es egoísta con su tiempo y dinero en ocasiones.", "Tenemos planes claros de cómo equipar nuestro hogar.", "Mi pareja respeta mi necesidad de estar solo/a a veces.", "Me preocupa la relación actual que mi pareja tiene con alguna ex pareja.", "Mi pareja es mi mejor amigo/a.", "Diferimos en la forma de celebrar fechas importantes.", "Mi pareja es una persona responsable en sus compromisos.", "Siento que no soy la prioridad número uno para mi pareja.", "Estamos de acuerdo en cómo manejar las deudas actuales.", "Me gusta el sentido del humor de mi pareja.", "Mi pareja es muy celosa o posesiva.", "Nuestros valores morales son idénticos.", "Me preocupa la higiene personal de mi pareja.", "Creo que juntos superaremos cualquier obstáculo.", "Mi pareja me motiva a ser una mejor persona.", "Mi pareja intenta cambiar mi personalidad.", "Tengo la convicción total de querer casarme con esta persona."] }
         ];
 
         let globalCounter = 1;
@@ -197,23 +88,13 @@
                     div.innerHTML = `
                         <div class="flex-1 pr-4">
                             <span class="font-bold text-gray-700 mr-1">${qId}.</span>
-                            <span class="text-gray-800 text-[15px] leading-tight font-medium">${text}</span>
+                            <span class="text-gray-800 text-sm font-medium">${text}</span>
                         </div>
-                        <div class="flex items-center gap-4 justify-start md:justify-end shrink-0">
-                            <label class="flex items-center gap-1 cursor-pointer">
-                                <input type="radio" name="q${qId}" value="Si" class="radio-custom text-indigo-600 focus:ring-indigo-500" required>
-                                <span class="text-sm font-semibold text-gray-600">Sí</span>
-                            </label>
-                            <label class="flex items-center gap-1 cursor-pointer">
-                                <input type="radio" name="q${qId}" value="No se" class="radio-custom text-indigo-600 focus:ring-indigo-500">
-                                <span class="text-sm font-semibold text-gray-600">No sé</span>
-                            </label>
-                            <label class="flex items-center gap-1 cursor-pointer">
-                                <input type="radio" name="q${qId}" value="No" class="radio-custom text-indigo-600 focus:ring-indigo-500">
-                                <span class="text-sm font-semibold text-gray-600">No</span>
-                            </label>
-                        </div>
-                    `;
+                        <div class="flex items-center gap-4 shrink-0">
+                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="q${qId}" value="Si" class="radio-custom" required> Sí</label>
+                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="q${qId}" value="No se" class="radio-custom"> No sé</label>
+                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="q${qId}" value="No" class="radio-custom"> No</label>
+                        </div>`;
                     container.appendChild(div);
                     globalCounter++;
                 });
@@ -222,317 +103,49 @@
 
         window.onload = () => {
             renderQuestions();
-            emailjs.init(""); 
+            emailjs.init(EMAILJS_PUBLIC_KEY);
         };
 
         document.getElementById('submit-btn').addEventListener('click', async function() {
-            const form = document.getElementById('quiz-form');
-            const totalQuestions = 82;
-            const formData = new FormData(form);
+            const formData = new FormData(document.getElementById('quiz-form'));
             const responses = {};
-            
             let count = 0;
-            for (let [key, value] of formData.entries()) {
-                responses[key] = value;
-                count++;
-            }
+            for (let [key, value] of formData.entries()) { responses[key] = value; count++; }
 
-            if (count < totalQuestions) {
-                alert(`Por favor, responde todas las preguntas. Has respondido ${count} de ${totalQuestions}.`);
-                // Encontrar la primera sin responder y hacer scroll
-                for(let i=1; i<=totalQuestions; i++) {
-                    if(!formData.get(`q${i}`)) {
-                        const el = document.getElementsByName(`q${i}`)[0];
-                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        break;
-                    }
-                }
+            const totalExpected = 58; 
+            if (count < totalExpected) {
+                alert("Por favor, responda todas las preguntas antes de enviar.");
                 return;
             }
 
             this.disabled = true;
-            this.innerHTML = `<span class="inline-block animate-spin mr-2">↻</span> ENVIANDO...`;
+            this.innerHTML = "ENVIANDO REVISIÓN...";
 
-            try {
-                // Simulación de envío exitoso
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                document.getElementById('quiz-container').classList.add('hidden');
-                document.getElementById('success-screen').classList.remove('hidden');
-                window.scrollTo(0,0);
-            } catch (e) {
-                alert("Error al enviar. Inténtalo de nuevo.");
-                this.disabled = false;
-                this.innerHTML = "FINALIZAR Y ENVIAR REVISIÓN";
-            }
-        });
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARCELO y MARU Cuestionario 1</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <style>
-        .radio-custom {
-            width: 1.25rem;
-            height: 1.25rem;
-            cursor: pointer;
-        }
-        .question-row:nth-child(even) {
-            background-color: #f9fafb;
-        }
-        .question-row:hover {
-            background-color: #f3f4f6;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 min-h-screen p-2 md:p-6 font-sans text-gray-900">
-    <div class="max-w-2xl mx-auto bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-200">
-        <!-- Encabezado -->
-        <div class="bg-indigo-700 p-6 text-white text-center">
-            <h1 class="text-2xl font-bold uppercase tracking-widest">MARCELO y MARU</h1>
-            <p class="text-indigo-100 text-sm mt-1">Cuestionario para Analizar la Relación de Pareja</p>
-        </div>
-
-        <div id="quiz-container">
-            <form id="quiz-form">
-                
-                <!-- Parte 1 -->
-                <div class="p-4 bg-gray-50 border-b border-gray-200">
-                    <h2 class="text-lg font-bold text-gray-800">Parte 1: Intereses, Personalidad y Expectativas</h2>
-                </div>
-                <div id="section-1"></div>
-
-                <!-- Parte 2 -->
-                <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
-                    <h2 class="text-lg font-bold text-gray-800">Parte 2: Comunicación y Emociones</h2>
-                </div>
-                <div id="section-2"></div>
-
-                <!-- Parte 3 -->
-                <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
-                    <h2 class="text-lg font-bold text-gray-800">Parte 3: Finanzas, Religión y Convivencia</h2>
-                </div>
-                <div id="section-3"></div>
-
-                <!-- Parte 4 -->
-                <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
-                    <h2 class="text-lg font-bold text-gray-800">Parte 4: Futuro y Compromiso</h2>
-                </div>
-                <div id="section-4"></div>
-
-                <div class="p-8 bg-gray-50 border-t border-gray-200">
-                    <button type="button" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg shadow-md transition duration-300 transform active:scale-95 text-lg">
-                        FINALIZAR Y ENVIAR REVISIÓN
-                    </button>
-                    <p class="text-center text-xs text-gray-500 mt-4 italic">Se enviará copia a erwinborquez.pastor@gmail.com</p>
-                </div>
-            </form>
-        </div>
-
-        <!-- Pantalla de éxito -->
-        <div id="success-screen" class="hidden p-16 text-center">
-            <div class="mb-6 inline-flex items-center justify-center w-24 h-24 bg-green-100 text-green-600 rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-                </svg>
-            </div>
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">¡Enviado!</h2>
-            <p class="text-gray-600 mb-8 text-lg">Tus respuestas han sido procesadas correctamente.</p>
-            <button onclick="location.reload()" class="bg-indigo-600 text-white px-10 py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg">
-                Volver a empezar
-            </button>
-        </div>
-    </div>
-
-    <script>
-        const sectionsData = [
-            {
-                id: 1,
-                questions: [
-                    "Mi futura pareja y yo tenemos muchos intereses en común.",
-                    "Mi pareja debe dejar algunos de sus hábitos.",
-                    "Existen personas que se oponen a nuestros planes de casarnos.",
-                    "Ambos tenemos el mismo horario de lucidez (nocturnos o madrugadores).",
-                    "He crecido con una idea favorable y positiva de la sexualidad.",
-                    "Mi pareja conoce mis sueños y metas de vida.",
-                    "El apoyo económico de padres o suegros produciría problemas.",
-                    "Hemos hablado sobre qué implicaría no poder tener hijos.",
-                    "Mi futura pareja administra bien el dinero.",
-                    "El hecho de que mi pareja no pertenezca a una iglesia evangélica ha causado problemas en mi familia.",
-                    "Nuestros puntos de vista sobre política producen tensiones.",
-                    "La manera como mi pareja se conduce en público me causa molestias.",
-                    "Han surgido dificultades porque mi pareja se quiere casar antes que yo.",
-                    "Mi pareja sabe escuchar atentamente.",
-                    "Siento libertad de conversar sobre temas sexuales (fantasías, etc.).",
-                    "Siento que mi pareja me valora y toma en serio mis puntos de vista.",
-                    "La exigencia de contacto de mis padres/suegros me estresa.",
-                    "Posteriormente quisiera tener hijos.",
-                    "Confío plenamente en la fidelidad de mi pareja.",
-                    "A veces siento que mi pareja me oculta cosas importantes.",
-                    "Tenemos claridad sobre cómo se disciplinarán los hijos."
-                ]
-            },
-            {
-                id: 2,
-                questions: [
-                    "Me molesta la forma en que mi pareja gasta el dinero en sí mismo/a.",
-                    "Creo que mi pareja depende demasiado de sus padres.",
-                    "Nuestras familias de origen son muy similares en costumbres.",
-                    "Me siento seguro/a expresando mis miedos a mi pareja.",
-                    "Mi pareja tiende a ser muy crítico/a conmigo.",
-                    "Compartimos la misma visión sobre el ahorro a largo plazo.",
-                    "Me asusta la idea de perder mi independencia al casarme.",
-                    "Considero que mi pareja es una persona paciente.",
-                    "A veces dudo de si realmente somos compatibles.",
-                    "Mi pareja muestra interés genuino por mi trabajo/estudios.",
-                    "Hemos discutido dónde viviremos después de casarnos.",
-                    "Me gusta la forma en que mi pareja trata a los demás.",
-                    "Siento que mi pareja me apoya en mis metas personales.",
-                    "Me preocupa el temperamento de mi pareja cuando se enoja.",
-                    "Tenemos las mismas creencias fundamentales sobre la fe.",
-                    "Me siento cómodo/a con los amigos de mi pareja.",
-                    "Mi pareja suele tomar decisiones sin consultarme.",
-                    "Siento que hay un equilibrio en nuestra relación.",
-                    "Me preocupa la influencia que sus amigos tienen sobre él/ella.",
-                    "Estamos de acuerdo en la frecuencia de las relaciones sexuales."
-                ]
-            },
-            {
-                id: 3,
-                questions: [
-                    "Hemos acordado quién va a administrar las finanzas.",
-                    "Nuestros puntos de vista religiosos difieren bastante.",
-                    "Mi pareja respeta mi deseo de seguir con mis pasatiempos privados.",
-                    "Tengo la impresión de que mi pareja tiene prejuicios frente a otros.",
-                    "Me siento presionado/a para casarme.",
-                    "Uno de nosotros tiene la tendencia de querer tener siempre la razón.",
-                    "Nuestras necesidades sexuales son muy diferentes.",
-                    "Me estresan las obligaciones laborales de mi pareja.",
-                    "Me preocupa que algún pariente produzca peleas entre nosotros.",
-                    "Hemos hablado cuántos hijos queremos tener.",
-                    "Nos hemos puesto de acuerdo en cómo administrar el dinero (presupuesto).",
-                    "Me siento como en casa en mi iglesia y me gusta colaborar.",
-                    "Siento incomodidad por los pasatiempos de mi pareja.",
-                    "Me preocupa la salud física o estabilidad emocional de uno de nosotros.",
-                    "No estoy seguro/a de si soy suficientemente atractivo/a para mi pareja.",
-                    "Tengo dificultad en expresar mis sentimientos más profundos.",
-                    "Me pregunto si podré suplir las expectativas sexuales de mi pareja.",
-                    "Acordamos compartir todos los trabajos de casa.",
-                    "Mi familia está alegre con la pareja que elegí.",
-                    "Mi pareja es detallista y cariñosa."
-                ]
-            },
-            {
-                id: 4,
-                questions: [
-                    "Siento que mi pareja me escucha pero no me entiende.",
-                    "Me preocupa que mi pareja sea demasiado gastador/a.",
-                    "Nuestra comunicación mejora después de una discusión.",
-                    "Me siento orgulloso/a de presentar a mi pareja ante otros.",
-                    "Creo que mi pareja es muy egoísta en ocasiones.",
-                    "Tenemos planes claros para nuestro futuro hogar.",
-                    "Mi pareja respeta mi espacio personal.",
-                    "Me preocupa la relación de mi pareja con su ex (si aplica).",
-                    "Siento que mi pareja es mi mejor amigo/a.",
-                    "Diferimos en la forma de celebrar fechas importantes.",
-                    "Mi pareja es muy responsable con sus compromisos.",
-                    "A veces siento que no soy la prioridad de mi pareja.",
-                    "Estamos de acuerdo en cómo manejar las deudas.",
-                    "Me gusta el sentido del humor de mi pareja.",
-                    "Siento que mi pareja es muy celosa.",
-                    "Tenemos los mismos valores morales.",
-                    "Me preocupa la higiene o cuidado personal de mi pareja.",
-                    "Siento que podemos superar cualquier obstáculo juntos.",
-                    "Mi pareja me motiva a ser una mejor persona.",
-                    "A veces siento que mi pareja intenta cambiarme.",
-                    "Estoy completamente convencido/a de casarme."
-                ]
-            }
-        ];
-
-        let globalCounter = 1;
-
-        function renderQuestions() {
+            let msg = "INFORME DE RESPUESTAS - MARCELO Y MARU\n\n";
+            let currentQ = 1;
             sectionsData.forEach(section => {
-                const container = document.getElementById(`section-${section.id}`);
-                section.questions.forEach(text => {
-                    const qId = globalCounter;
-                    const div = document.createElement('div');
-                    div.className = "question-row flex flex-col md:flex-row md:items-center justify-between p-4 border-b border-gray-100 gap-3";
-                    div.innerHTML = `
-                        <div class="flex-1 pr-4">
-                            <span class="font-bold text-gray-700 mr-1">${qId}.</span>
-                            <span class="text-gray-800 text-[15px] leading-tight font-medium">${text}</span>
-                        </div>
-                        <div class="flex items-center gap-4 justify-start md:justify-end shrink-0">
-                            <label class="flex items-center gap-1 cursor-pointer">
-                                <input type="radio" name="q${qId}" value="Si" class="radio-custom text-indigo-600 focus:ring-indigo-500" required>
-                                <span class="text-sm font-semibold text-gray-600">Sí</span>
-                            </label>
-                            <label class="flex items-center gap-1 cursor-pointer">
-                                <input type="radio" name="q${qId}" value="No se" class="radio-custom text-indigo-600 focus:ring-indigo-500">
-                                <span class="text-sm font-semibold text-gray-600">No sé</span>
-                            </label>
-                            <label class="flex items-center gap-1 cursor-pointer">
-                                <input type="radio" name="q${qId}" value="No" class="radio-custom text-indigo-600 focus:ring-indigo-500">
-                                <span class="text-sm font-semibold text-gray-600">No</span>
-                            </label>
-                        </div>
-                    `;
-                    container.appendChild(div);
-                    globalCounter++;
+                msg += `--- ${section.title.toUpperCase()} ---\n`;
+                section.questions.forEach(qText => {
+                    msg += `${currentQ}. ${qText}: ${responses['q'+currentQ]}\n`;
+                    currentQ++;
                 });
+                msg += "\n";
             });
-        }
 
-        window.onload = () => {
-            renderQuestions();
-            emailjs.init(""); 
-        };
-
-        document.getElementById('submit-btn').addEventListener('click', async function() {
-            const form = document.getElementById('quiz-form');
-            const totalQuestions = 82;
-            const formData = new FormData(form);
-            const responses = {};
-            
-            let count = 0;
-            for (let [key, value] of formData.entries()) {
-                responses[key] = value;
-                count++;
-            }
-
-            if (count < totalQuestions) {
-                alert(`Por favor, responde todas las preguntas. Has respondido ${count} de ${totalQuestions}.`);
-                // Encontrar la primera sin responder y hacer scroll
-                for(let i=1; i<=totalQuestions; i++) {
-                    if(!formData.get(`q${i}`)) {
-                        const el = document.getElementsByName(`q${i}`)[0];
-                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        break;
-                    }
-                }
-                return;
-            }
-
-            this.disabled = true;
-            this.innerHTML = `<span class="inline-block animate-spin mr-2">↻</span> ENVIANDO...`;
-
-            try {
-                // Simulación de envío exitoso
-                await new Promise(resolve => setTimeout(resolve, 2000));
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                from_name: "Cuestionario Pareja",
+                message: msg,
+                to_email: "erwinborquez.pastor@gmail.com"
+            }).then(() => {
                 document.getElementById('quiz-container').classList.add('hidden');
                 document.getElementById('success-screen').classList.remove('hidden');
                 window.scrollTo(0,0);
-            } catch (e) {
-                alert("Error al enviar. Inténtalo de nuevo.");
+            }).catch(err => {
+                console.error("Error EmailJS:", err);
+                alert("Hubo un error al enviar el correo. Por favor, intente nuevamente.");
                 this.disabled = false;
                 this.innerHTML = "FINALIZAR Y ENVIAR REVISIÓN";
-            }
+            });
         });
     </script>
 </body>
