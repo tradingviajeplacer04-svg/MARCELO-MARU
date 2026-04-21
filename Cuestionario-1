@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>marcelo y maru Cuestionario Relación de Pareja</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .question-row:nth-child(even) {
+            background-color: #f9fafb;
+        }
+        .radio-group input {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+        <header class="bg-slate-800 text-white p-6 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold uppercase tracking-wide">Marcelo y Maru
+            <h2 Cuestionario Relación de Pareja</h1>
+            <p class="mt-2 text-slate-300 italic">Responda con honestidad para reflexionar sobre su dinámica actual</p>
+        </header>
+
+        <form id="quizForm" class="p-6">
+            <!-- PARTE 1 -->
+            <section class="mb-10">
+                <h2 class="text-xl font-bold border-b-2 border-slate-200 pb-2 mb-4 text-slate-700">Parte 1: Intereses, Personalidad y Expectativas</h2>
+                <div id="part1" class="space-y-1">
+                    <!-- Questions 1-18 will be injected here -->
+                </div>
+            </section>
+
+            <!-- PARTE 2 -->
+            <section class="mb-10">
+                <h2 class="text-xl font-bold border-b-2 border-slate-200 pb-2 mb-4 text-slate-700">Parte 2: Finanzas, Religión y Convivencia</h2>
+                <div id="part2" class="space-y-1">
+                    <!-- Questions 19-37 will be injected here -->
+                </div>
+            </section>
+
+            <div class="flex justify-center pb-8">
+                <button type="button" onclick="calculateResults()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-10 rounded-full transition duration-300 shadow-lg">
+                    Finalizar y Revisar
+                </button>
+            </div>
+        </form>
+
+        <div id="resultsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="bg-white rounded-lg p-6 max-w-md w-full shadow-2xl">
+                <h3 class="text-2xl font-bold mb-4 text-slate-800">Resumen del Cuestionario</h3>
+                <div id="stats" class="space-y-2 mb-6"></div>
+                <p class="text-sm text-gray-600 mb-6 italic">Este cuestionario es una herramienta de autorreflexión. Le recomendamos conversar sobre los puntos "No" o "No sé" con su pareja o un consejero.</p>
+                <button onclick="closeModal()" class="w-full bg-slate-800 text-white py-2 rounded-md hover:bg-slate-900 transition">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questionsPart1 = [
+            "Mi futura pareja y yo tenemos muchos intereses en común.",
+            "Mi pareja debe dejar algunos de sus hábitos.",
+            "Existen personas que se oponen a nuestros planes de casarnos.",
+            "Ambos tenemos el mismo horario de lucidez (nocturnos o madrugadores).",
+            "He crecido con una idea favorable y positiva de la sexualidad.",
+            "Mi pareja conoce mis sueños y metas de vida.",
+            "El apoyo económico de padres o suegros produciría problemas.",
+            "Hemos hablado sobre qué implicaría no poder tener hijos.",
+            "Mi futura pareja administra bien el dinero.",
+            "El hecho de que mi pareja no pertenezca a una iglesia evangélica ha causado problemas en mi familia.",
+            "Nuestros puntos de vista sobre política producen tensiones.",
+            "La manera como mi pareja se conduce en público me causa molestias.",
+            "Han surgido dificultades porque mi pareja se quiere casar antes que yo.",
+            "Mi pareja sabe escuchar atentamente.",
+            "Siento libertad de conversar sobre temas sexuales (fantasías, etc.).",
+            "Siento que mi pareja me valora y toma en serio mis puntos de vista.",
+            "La exigencia de contacto de mis padres/suegros me estresa.",
+            "Posteriormente quisiera tener hijos."
+        ];
+
+        const questionsPart2 = [
+            "Hemos acordado quién va a administrar las finanzas.",
+            "Nuestros puntos de vista religiosos difieren bastante.",
+            "Mi pareja respeta mi deseo de seguir con mis pasatiempos privados.",
+            "Tengo la impresión de que mi pareja tiene prejuicios frente a otros.",
+            "Me siento presionado/a para casarme.",
+            "Uno de nosotros tiene la tendencia de querer tener siempre la razón.",
+            "Nuestras necesidades sexuales son muy diferentes.",
+            "Me estresan las obligaciones laborales de mi pareja.",
+            "Me preocupa que algún pariente produzca peleas entre nosotros.",
+            "Hemos hablado cuántos hijos queremos tener.",
+            "Nos hemos puesto de acuerdo en cómo administrar el dinero (presupuesto).",
+            "Me siento como en casa en mi iglesia y me gusta colaborar.",
+            "Siento incomodidad por los pasatiempos de mi pareja.",
+            "Me preocupa la salud física o estabilidad emocional de uno de nosotros.",
+            "No estoy seguro/a de si soy suficientemente atractivo/a para mi pareja.",
+            "Tengo dificultad en expresar mis sentimientos más profundos.",
+            "Me pregunto si podré suplir las expectativas sexuales de mi pareja.",
+            "Acordamos compartir todos los trabajos de casa.",
+            "Mi familia está alegre con la pareja que elegí."
+        ];
+
+        function renderQuestions(containerId, questions, startIndex) {
+            const container = document.getElementById(containerId);
+            questions.forEach((q, index) => {
+                const qNum = startIndex + index;
+                const div = document.createElement('div');
+                div.className = 'question-row p-3 flex flex-col md:flex-row md:items-center justify-between border-b border-gray-100 last:border-0';
+                div.innerHTML = `
+                    <div class="flex-1 pr-4 mb-2 md:mb-0 text-slate-700">
+                        <span class="font-semibold mr-2">${qNum}.</span> ${q}
+                    </div>
+                    <div class="flex space-x-4 radio-group shrink-0">
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="q${qNum}" value="Sí" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm">Sí</span>
+                        </label>
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="q${qNum}" value="No sé" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm">No sé</span>
+                        </label>
+                        <label class="flex items-center space-x-1 cursor-pointer">
+                            <input type="radio" name="q${qNum}" value="No" class="w-4 h-4 text-indigo-600">
+                            <span class="text-sm">No</span>
+                        </label>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function calculateResults() {
+            const form = document.getElementById('quizForm');
+            const formData = new FormData(form);
+            let results = { "Sí": 0, "No sé": 0, "No": 0 };
+            let total = questionsPart1.length + questionsPart2.length;
+            let answered = 0;
+
+            for (let pair of formData.entries()) {
+                results[pair[1]]++;
+                answered++;
+            }
+
+            if (answered < total) {
+                if(!confirm(`Ha respondido ${answered} de ${total} preguntas. ¿Desea ver el resumen de todos modos?`)) return;
+            }
+
+            const statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML = `
+                <div class="flex justify-between items-center p-2 bg-green-50 rounded">
+                    <span class="font-bold text-green-700">Total de "Sí":</span>
+                    <span class="text-lg">${results["Sí"]}</span>
+                </div>
+                <div class="flex justify-between items-center p-2 bg-yellow-50 rounded">
+                    <span class="font-bold text-yellow-700">Total de "No sé":</span>
+                    <span class="text-lg">${results["No sé"]}</span>
+                </div>
+                <div class="flex justify-between items-center p-2 bg-red-50 rounded">
+                    <span class="font-bold text-red-700">Total de "No":</span>
+                    <span class="text-lg">${results["No"]}</span>
+                </div>
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <p class="font-semibold">Preguntas sin responder: ${total - answered}</p>
+                </div>
+            `;
+            document.getElementById('resultsModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('resultsModal').classList.add('hidden');
+        }
+
+        window.onload = () => {
+            renderQuestions('part1', questionsPart1, 1);
+            renderQuestions('part2', questionsPart2, 19);
+        };
+    </script>
+</body>
+</html>
