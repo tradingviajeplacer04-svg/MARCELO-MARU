@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARCELO y MARU Cuestionario 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        .radio-custom {
+            width: 1.25rem;
+            height: 1.25rem;
+            cursor: pointer;
+        }
+        .question-row:nth-child(even) { background-color: #f9fafb; }
+        .question-row:hover { background-color: #f3f4f6; }
+        .section-card { display: none; }
+        .section-card.active { display: block; }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-2 md:p-6 font-sans text-gray-900">
+    <div class="max-w-2xl mx-auto bg-white shadow-2xl rounded-lg overflow-hidden border border-gray-200">
+        <!-- Encabezado -->
+        <div class="bg-indigo-700 p-6 text-white text-center">
+            <h1 class="text-2xl font-bold uppercase tracking-widest">MARCELO y MARU</h1>
+            <p class="text-indigo-100 text-sm mt-1">Cuestionario para Analizar la Relación de Pareja</p>
+        </div>
+
+        <div id="quiz-container">
+            <form id="quiz-form">
+                <!-- Selección de Nombre -->
+                <div id="user-selector" class="p-6 bg-indigo-50 border-b border-indigo-100 text-center">
+                    <label class="block text-indigo-900 font-bold mb-4 italic underline">PASO 1: SELECCIONA TU NOMBRE</label>
+                    <div class="flex justify-center gap-6">
+                        <label class="flex items-center gap-2 cursor-pointer bg-white px-5 py-3 rounded-xl border border-indigo-200 shadow-sm hover:bg-indigo-100 transition group">
+                            <input type="radio" name="userName" value="MARCELO" class="w-5 h-5 accent-indigo-600" onchange="saveUserName('MARCELO')" required>
+                            <span class="font-bold text-indigo-700">MARCELO</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer bg-white px-5 py-3 rounded-xl border border-pink-200 shadow-sm hover:bg-pink-50 transition group">
+                            <input type="radio" name="userName" value="MARU" class="w-5 h-5 accent-pink-500" onchange="saveUserName('MARU')">
+                            <span class="font-bold text-pink-600">MARU</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Secciones de Preguntas -->
+                <div id="sections-wrapper">
+                    <!-- Las secciones se generan dinámicamente -->
+                </div>
+            </form>
+        </div>
+
+        <!-- Pantalla de Éxito Individual -->
+        <div id="success-screen" class="hidden p-6 md:p-12 text-center">
+            <div class="mb-4 inline-flex items-center justify-center w-20 h-20 bg-green-100 text-green-600 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">¡Sección Enviada!</h2>
+            <p id="success-msg" class="text-gray-600 mb-6 font-medium">Las respuestas de esta parte han sido enviadas al Pastor.</p>
+            
+            <div id="section-result" class="mb-8 p-4 bg-gray-50 rounded-lg border border-gray-200 inline-block w-full">
+                <!-- Resultado de afinidad de la sección -->
+            </div>
+
+            <button onclick="goToNextSection()" id="next-section-btn" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-indigo-700 transition shadow-lg w-full md:w-auto">
+                CONTINUAR A LA SIGUIENTE PARTE
+            </button>
+            
+            <div id="final-finish" class="hidden">
+                <p class="text-green-700 font-bold mb-4">¡Has completado todas las secciones del cuestionario!</p>
+                <button onclick="location.reload()" class="bg-gray-800 text-white px-8 py-3 rounded-lg font-bold hover:bg-black transition">
+                    Reiniciar Cuestionario
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const EMAILJS_PUBLIC_KEY = "_U0Ot3H7izrQwZRlv";
+        const EMAILJS_TEMPLATE_ID = "template_0ggw04o";
+        const EMAILJS_SERVICE_ID = "service_9pb3ug4"; 
+
+        const sectionsData = [
+            { id: 1, title: "Parte 1: Intereses, Personalidad y Expectativas", questions: ["Mi futura pareja y yo tenemos muchos intereses en común.", "Mi pareja debe dejar algunos de sus hábitos.", "Existen personas que se oponen a nuestros planes de casarnos.", "Ambos tenemos el mismo horario de lucidez.", "He crecido con una idea positiva de la sexualidad.", "Mi pareja conoce mis sueños.", "El apoyo económico de padres produciría problemas.", "Hemos hablado sobre no poder tener hijos.", "Mi pareja administra bien el dinero.", "La fe ha causado problemas familiares.", "La política produce tensiones.", "Su conducta en público me molesta.", "Hay presión por casarnos pronto.", "Mi pareja sabe escuchar.", "Libertad para hablar de temas sexuales.", "Me siento valorado/a.", "El contacto con suegros me estresa.", "Quisiera tener hijos.", "Confío plenamente en su fidelidad.", "Siento que me oculta cosas.", "Claridad sobre disciplina de hijos."] },
+            { id: 2, title: "Parte 2: Comunicación y Emociones", questions: ["Me molesta cómo gasta su dinero.", "Depende demasiado de sus padres.", "Nuestras familias son similares.", "Seguridad expresando mis miedos.", "Mi pareja es muy crítica.", "Misma visión de ahorro.", "Miedo a perder independencia.", "Es una persona paciente.", "Dudas sobre compatibilidad.", "Interés genuino en mis estudios/trabajo.", "Discusión sobre dónde vivir.", "Me gusta cómo trata a los demás.", "Apoyo en mis metas.", "Miedo a su temperamento.", "Mismas creencias de fe.", "Comodidad con sus amigos.", "Toma decisiones sin consultar.", "Hay equilibrio en la relación.", "Influencia de sus amigos.", "Acuerdo en frecuencia sexual."] },
+            { id: 3, title: "Parte 3: Finanzas, Religión y Convivencia", questions: ["Acuerdo en quién administra el dinero.", "Vistas religiosas difieren.", "Respeto a mis pasatiempos.", "Tiene prejuicios frente a otros.", "Presión para casarme.", "Uno siempre quiere tener la razón.", "Necesidades sexuales diferentes.", "Estrés por su trabajo.", "Parientes producen peleas.", "Hablamos cuántos hijos tener.", "Acuerdo en presupuesto.", "Comodidad en mi iglesia.", "Incomodidad con sus hobbies.", "Preocupación por su salud/estabilidad.", "Dudas sobre mi atractivo físico.", "Dificultad en expresar sentimientos.", "Dudas sobre expectativas sexuales.", "Compartir trabajos de casa.", "Familia alegre con mi elección.", "Es detallista y cariñosa."] },
+            { id: 4, title: "Parte 4: Futuro y Compromiso", questions: ["Me escucha pero no me entiende.", "Me preocupa que gaste mucho.", "Comunicación mejora tras discusión.", "Orgullo de presentarlo/a.", "Es egoísta en ocasiones.", "Planes claros para el hogar.", "Respeta mi espacio.", "Relación con su ex.", "Es mi mejor amigo/a.", "Diferimos en la forma de celebrar fechas importantes.", "Es responsable.", "No soy su prioridad.", "Acuerdo en manejo de deudas.", "Me gusta su humor.", "Es muy celoso/a.", "Mismos valores morales.", "Preocupación por su higiene.", "Superaremos obstáculos juntos.", "Me motiva a ser mejor.", "Intenta cambiarme.", "Convicción total de casarme."] }
+        ];
+
+        let currentActiveSection = 1;
+        let selectedUserName = "";
+
+        function saveUserName(name) {
+            selectedUserName = name;
+            // Al seleccionar nombre, mostramos la primera sección
+            document.querySelectorAll('.section-card').forEach(c => c.classList.remove('active'));
+            document.getElementById('section-container-1').classList.add('active');
+        }
+
+        function renderSections() {
+            const wrapper = document.getElementById('sections-wrapper');
+            let questionId = 1;
+
+            sectionsData.forEach((section, index) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.id = `section-container-${section.id}`;
+                sectionDiv.className = `section-card`; 
+
+                let questionsHtml = section.questions.map((qText) => {
+                    const id = questionId++;
+                    return `
+                        <div class="question-row flex flex-col md:flex-row md:items-center justify-between p-4 border-b border-gray-100 gap-3">
+                            <div class="flex-1 pr-4">
+                                <span class="font-bold text-gray-700 mr-1">${id}.</span>
+                                <span class="text-gray-800 text-[14px] font-medium leading-tight">${qText}</span>
+                            </div>
+                            <div class="flex items-center gap-4 shrink-0">
+                                <label class="flex items-center gap-1 cursor-pointer text-xs"><input type="radio" name="q${id}" value="Si" class="radio-custom" onchange="updateProgress(${section.id})" required> Sí</label>
+                                <label class="flex items-center gap-1 cursor-pointer text-xs"><input type="radio" name="q${id}" value="No se" class="radio-custom" onchange="updateProgress(${section.id})"> No sé</label>
+                                <label class="flex items-center gap-1 cursor-pointer text-xs"><input type="radio" name="q${id}" value="No" class="radio-custom" onchange="updateProgress(${section.id})"> No</label>
+                            </div>
+                        </div>`;
+                }).join('');
+
+                sectionDiv.innerHTML = `
+                    <div class="p-4 bg-indigo-50 border-b border-indigo-100 flex justify-between items-center sticky top-0 z-10">
+                        <h2 class="text-sm font-black text-indigo-900 uppercase tracking-tighter">${section.title}</h2>
+                        <div class="text-xs font-bold text-indigo-600 bg-white px-2 py-1 rounded border border-indigo-200">
+                            Progreso: <span id="prog-val-${section.id}">0</span>/${section.questions.length}
+                        </div>
+                    </div>
+                    <div class="w-full bg-gray-200 h-1">
+                        <div id="prog-bar-${section.id}" class="bg-indigo-500 h-1 transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <div class="questions-list">${questionsHtml}</div>
+                    <div class="p-6 bg-gray-50 border-t border-gray-200">
+                        <button type="button" onclick="submitCurrentSection(${section.id})" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg shadow transition transform active:scale-95 uppercase text-sm">
+                            Enviar ${section.title}
+                        </button>
+                    </div>
+                `;
+                wrapper.appendChild(sectionDiv);
+            });
+        }
+
+        function updateProgress(sectionId) {
+            const section = sectionsData.find(s => s.id === sectionId);
+            const total = section.questions.length;
+            
+            let startId = 1;
+            for(let i=0; i < sectionsData.indexOf(section); i++) {
+                startId += sectionsData[i].questions.length;
+            }
+
+            let answered = 0;
+            for(let i=0; i < total; i++) {
+                if(document.querySelector(`input[name="q${startId + i}"]:checked`)) answered++;
+            }
+
+            const perc = (answered / total) * 100;
+            document.getElementById(`prog-val-${sectionId}`).innerText = answered;
+            document.getElementById(`prog-bar-${sectionId}`).style.width = `${perc}%`;
+        }
+
+        async function submitCurrentSection(sectionId) {
+            if(!selectedUserName) {
+                alert("Por favor, selecciona tu nombre al inicio de la página.");
+                window.scrollTo({top: 0, behavior: 'smooth'});
+                return;
+            }
+
+            const section = sectionsData.find(s => s.id === sectionId);
+            const total = section.questions.length;
+            let startId = 1;
+            for(let i=0; i < sectionsData.indexOf(section); i++) {
+                startId += sectionsData[i].questions.length;
+            }
+
+            const responses = {};
+            let answeredCount = 0;
+            let siCount = 0;
+
+            for(let i=0; i < total; i++) {
+                const val = document.querySelector(`input[name="q${startId + i}"]:checked`)?.value;
+                if(val) {
+                    responses[`q${startId + i}`] = val;
+                    answeredCount++;
+                    if(val === "Si") siCount++;
+                }
+            }
+
+            if(answeredCount < total) {
+                alert(`Debes responder las ${total} preguntas de esta sección antes de enviar.`);
+                return;
+            }
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.innerHTML = "ENVIANDO SECCIÓN...";
+
+            const affinityPerc = Math.round((siCount / total) * 100);
+
+            let msg = `INFORME PARCIAL - ${selectedUserName}\n`;
+            msg += `SECCIÓN: ${section.title}\n`;
+            msg += `AFINIDAD EN ESTA ÁREA: ${affinityPerc}%\n\n`;
+            msg += `--- DETALLE ---\n`;
+            
+            for(let i=0; i < total; i++) {
+                msg += `${startId + i}. ${section.questions[i]}: ${responses['q'+(startId+i)]}\n`;
+            }
+
+            emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                from_name: `${selectedUserName} - ${section.title}`,
+                message: msg,
+                to_email: "erwinborquez.pastor@gmail.com"
+            }).then(() => {
+                showSectionSuccess(sectionId, affinityPerc);
+            }).catch(err => {
+                console.error(err);
+                alert("Error al enviar. Revisa tu conexión.");
+                btn.disabled = false;
+                btn.innerHTML = `REINTENTAR ENVÍO ${sectionId}`;
+            });
+        }
+
+        function showSectionSuccess(sectionId, percentage) {
+            document.getElementById('quiz-container').classList.add('hidden');
+            const resultBox = document.getElementById('section-result');
+            
+            const colorClass = percentage > 70 ? 'text-green-600' : (percentage > 40 ? 'text-yellow-600' : 'text-red-600');
+            
+            resultBox.innerHTML = `
+                <p class="text-gray-500 text-xs uppercase font-bold mb-1">Afinidad de esta clase:</p>
+                <div class="text-4xl font-black ${colorClass}">${percentage}%</div>
+                <div class="w-full bg-gray-200 h-2 mt-3 rounded-full overflow-hidden">
+                    <div class="h-full ${percentage > 70 ? 'bg-green-500' : (percentage > 40 ? 'bg-yellow-500' : 'bg-red-500')}" style="width: ${percentage}%"></div>
+                </div>
+            `;
+
+            if(sectionId === sectionsData.length) {
+                document.getElementById('next-section-btn').classList.add('hidden');
+                document.getElementById('final-finish').classList.remove('hidden');
+                document.getElementById('success-msg').innerText = "¡Enhorabuena! Has enviado la última sección del cuestionario.";
+            } else {
+                currentActiveSection = sectionId + 1;
+                document.getElementById('next-section-btn').classList.remove('hidden');
+                document.getElementById('final-finish').classList.add('hidden');
+            }
+
+            document.getElementById('success-screen').classList.remove('hidden');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function goToNextSection() {
+            document.getElementById('success-screen').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+            
+            document.querySelectorAll('.section-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(`section-container-${currentActiveSection}`).classList.add('active');
+            
+            document.getElementById('user-selector').classList.add('hidden');
+            
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        window.onload = () => {
+            renderSections();
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+        };
+    </script>
+</body>
+</html>
