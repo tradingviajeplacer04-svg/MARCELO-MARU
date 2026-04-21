@@ -32,14 +32,19 @@
                 <div id="section-1"></div>
 
                 <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
-                    <h2 class="text-lg font-bold text-gray-800">Parte 2: Finanzas, Religión y Convivencia</h2>
+                    <h2 class="text-lg font-bold text-gray-800">Parte 2: Comunicación y Emociones</h2>
                 </div>
                 <div id="section-2"></div>
 
                 <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
-                    <h2 class="text-lg font-bold text-gray-800">Parte 3: Comunicación y Futuro</h2>
+                    <h2 class="text-lg font-bold text-gray-800">Parte 3: Finanzas, Religión y Convivencia</h2>
                 </div>
                 <div id="section-3"></div>
+
+                <div class="p-4 bg-gray-50 border-b border-gray-200 mt-4">
+                    <h2 class="text-lg font-bold text-gray-800">Parte 4: Futuro y Compromiso</h2>
+                </div>
+                <div id="section-4"></div>
 
                 <div class="p-8 bg-gray-50 border-t border-gray-200">
                     <button type="button" id="submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-lg shadow-md transition duration-300 transform active:scale-95 text-lg">
@@ -57,23 +62,21 @@
                 </svg>
             </div>
             <h2 class="text-3xl font-bold text-gray-800 mb-2">¡Enviado con Éxito!</h2>
-            <p class="text-gray-600 mb-6">Tus respuestas han sido enviadas correctamente al Pastor.</p>
+            <p class="text-gray-600 mb-6">Tus 82 respuestas han sido enviadas correctamente al Pastor.</p>
             <button onclick="location.reload()" class="bg-indigo-600 text-white px-8 py-2 rounded-lg font-bold hover:bg-indigo-700 transition">Reiniciar Cuestionario</button>
         </div>
     </div>
 
     <script>
-        // ============================================================
-        // CONFIGURACIÓN DE EMAILJS - ACTUALIZADA POR GEMINI
-        // ============================================================
         const EMAILJS_PUBLIC_KEY = "_U0Ot3H7izrQwZRlv";
         const EMAILJS_TEMPLATE_ID = "template_0ggw04o";
         const EMAILJS_SERVICE_ID = "service_9pb3ug4"; 
 
         const sectionsData = [
-            { id: 1, title: "Intereses y Personalidad", questions: ["Mi futura pareja y yo tenemos muchos intereses en común.", "Mi pareja debe dejar algunos de sus hábitos.", "Existen personas que se oponen a nuestros planes de casarnos.", "Ambos tenemos el mismo horario de lucidez (nocturnos o madrugadores).", "He crecido con una idea favorable y positiva de la sexualidad.", "Mi pareja conoce mis sueños y metas de vida.", "El apoyo económico de padres o suegros produciría problemas.", "Hemos hablado sobre qué implicaría no poder tener hijos.", "Mi futura pareja administra bien el dinero.", "El hecho de que mi pareja no pertenezca a una iglesia evangélica ha causado problemas en mi familia.", "Nuestros puntos de vista sobre política producen tensiones.", "La manera como mi pareja se conduce en público me causa molestias.", "Han surgido dificultades porque mi pareja se quiere casar antes que yo.", "Mi pareja sabe escuchar atentamente.", "Siento libertad de conversar sobre temas sexuales (fantasías, etc.).", "Siento que mi pareja me valora y toma en serio mis puntos de vista.", "La exigencia de contacto con mis padres/suegros me estresa.", "Posteriormente quisiera tener hijos."] },
-            { id: 2, title: "Finanzas y Convivencia", questions: ["Hemos acordado quién va a administrar las finanzas.", "Nuestros puntos de vista religiosos difieren bastante.", "Mi pareja respeta mi deseo de seguir con mis pasatiempos privados.", "Tengo la impresión de que mi pareja tiene prejuicios frente a otros.", "Me siento presionado/a para casarme.", "Uno de nosotros tiene la tendencia de querer tener siempre la razón.", "Nuestras necesidades sexuales son muy diferentes.", "Me estresan las obligaciones laborales de mi pareja.", "Me preocupa que algún pariente produzca peleas entre nosotros.", "Hemos hablado cuántos hijos queremos tener.", "Nos hemos puesto de acuerdo en cómo administrar el dinero (presupuesto).", "Me siento como en casa en mi iglesia y me gusta colaborar.", "Siento incomodidad por los pasatiempos de mi pareja.", "Me preocupa la salud física o estabilidad emocional de uno de nosotros.", "No estoy seguro/a de si soy suficientemente atractivo/a para mi pareja.", "Tengo dificultad en expresar mis sentimientos más profundos.", "Me pregunto si podré suplir las expectativas sexuales de mi pareja.", "Acordamos compartir todos los trabajos de casa.", "Mi familia está alegre con la pareja que elegí."] },
-            { id: 3, title: "Preguntas Adicionales", questions: ["Mi pareja me escucha pero siento que no me entiende.", "Me preocupa que mi pareja gaste demasiado dinero.", "Nuestra comunicación tiende a mejorar después de una discusión.", "Me siento orgulloso/a de presentar a mi pareja ante otros.", "Mi pareja es egoísta con su tiempo y dinero en ocasiones.", "Tenemos planes claros de cómo equipar nuestro hogar.", "Mi pareja respeta mi necesidad de estar solo/a a veces.", "Me preocupa la relación actual que mi pareja tiene con alguna ex pareja.", "Mi pareja es mi mejor amigo/a.", "Diferimos en la forma de celebrar fechas importantes.", "Mi pareja es una persona responsable en sus compromisos.", "Siento que no soy la prioridad número uno para mi pareja.", "Estamos de acuerdo en cómo manejar las deudas actuales.", "Me gusta el sentido del humor de mi pareja.", "Mi pareja es muy celosa o posesiva.", "Nuestros valores morales son idénticos.", "Me preocupa la higiene personal de mi pareja.", "Creo que juntos superaremos cualquier obstáculo.", "Mi pareja me motiva a ser una mejor persona.", "Mi pareja intenta cambiar mi personalidad.", "Tengo la convicción total de querer casarme con esta persona."] }
+            { id: 1, title: "Intereses, Personalidad y Expectativas", questions: ["Mi futura pareja y yo tenemos muchos intereses en común.", "Mi pareja debe dejar algunos de sus hábitos.", "Existen personas que se oponen a nuestros planes de casarnos.", "Ambos tenemos el mismo horario de lucidez.", "He crecido con una idea positiva de la sexualidad.", "Mi pareja conoce mis sueños.", "El apoyo económico de padres produciría problemas.", "Hemos hablado sobre no poder tener hijos.", "Mi pareja administra bien el dinero.", "La fe ha causado problemas familiares.", "La política produce tensiones.", "Su conducta en público me molesta.", "Hay presión por casarnos pronto.", "Mi pareja sabe escuchar.", "Libertad para hablar de temas sexuales.", "Me siento valorado/a.", "El contacto con suegros me estresa.", "Quisiera tener hijos.", "Confío plenamente en su fidelidad.", "Siento que me oculta cosas.", "Claridad sobre disciplina de hijos."] },
+            { id: 2, title: "Comunicación y Emociones", questions: ["Me molesta cómo gasta su dinero.", "Depende demasiado de sus padres.", "Nuestras familias son similares.", "Seguridad expresando mis miedos.", "Mi pareja es muy crítica.", "Misma visión de ahorro.", "Miedo a perder independencia.", "Es una persona paciente.", "Dudas sobre compatibilidad.", "Interés genuino en mis estudios/trabajo.", "Discusión sobre dónde vivir.", "Me gusta cómo trata a los demás.", "Apoyo en mis metas.", "Miedo a su temperamento.", "Mismas creencias de fe.", "Comodidad con sus amigos.", "Toma decisiones sin consultar.", "Hay equilibrio en la relación.", "Influencia de sus amigos.", "Acuerdo en frecuencia sexual."] },
+            { id: 3, title: "Finanzas, Religión y Convivencia", questions: ["Acuerdo en quién administra el dinero.", "Vistas religiosas difieren.", "Respeto a mis pasatiempos.", "Tiene prejuicios frente a otros.", "Presión para casarme.", "Uno siempre quiere tener la razón.", "Necesidades sexuales diferentes.", "Estrés por su trabajo.", "Parientes producen peleas.", "Hablamos cuántos hijos tener.", "Acuerdo en presupuesto.", "Comodidad en mi iglesia.", "Incomodidad con sus hobbies.", "Preocupación por su salud/estabilidad.", "Dudas sobre mi atractivo físico.", "Dificultad en expresar sentimientos.", "Dudas sobre expectativas sexuales.", "Compartir trabajos de casa.", "Familia alegre con mi elección.", "Es detallista y cariñosa."] },
+            { id: 4, title: "Futuro y Compromiso", questions: ["Me escucha pero no me entiende.", "Me preocupa que gaste mucho.", "Comunicación mejora tras discusión.", "Orgullo de presentarlo/a.", "Es egoísta en ocasiones.", "Planes claros para el hogar.", "Respeta mi espacio.", "Relación con su ex.", "Es mi mejor amigo/a.", "Diferimos en la forma de celebrar fechas importantes.", "Es responsable.", "No soy su prioridad.", "Acuerdo en manejo de deudas.", "Me gusta su humor.", "Es muy celoso/a.", "Mismos valores morales.", "Preocupación por su higiene.", "Superaremos obstáculos juntos.", "Me motiva a ser mejor.", "Intenta cambiarme.", "Convicción total de casarme."] }
         ];
 
         let globalCounter = 1;
@@ -88,12 +91,12 @@
                     div.innerHTML = `
                         <div class="flex-1 pr-4">
                             <span class="font-bold text-gray-700 mr-1">${qId}.</span>
-                            <span class="text-gray-800 text-sm font-medium">${text}</span>
+                            <span class="text-gray-800 text-[14px] font-medium leading-tight">${text}</span>
                         </div>
                         <div class="flex items-center gap-4 shrink-0">
-                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="q${qId}" value="Si" class="radio-custom" required> Sí</label>
-                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="q${qId}" value="No se" class="radio-custom"> No sé</label>
-                            <label class="flex items-center gap-1 cursor-pointer text-sm"><input type="radio" name="q${qId}" value="No" class="radio-custom"> No</label>
+                            <label class="flex items-center gap-1 cursor-pointer text-xs"><input type="radio" name="q${qId}" value="Si" class="radio-custom" required> Sí</label>
+                            <label class="flex items-center gap-1 cursor-pointer text-xs"><input type="radio" name="q${qId}" value="No se" class="radio-custom"> No sé</label>
+                            <label class="flex items-center gap-1 cursor-pointer text-xs"><input type="radio" name="q${qId}" value="No" class="radio-custom"> No</label>
                         </div>`;
                     container.appendChild(div);
                     globalCounter++;
@@ -112,16 +115,15 @@
             let count = 0;
             for (let [key, value] of formData.entries()) { responses[key] = value; count++; }
 
-            const totalExpected = 58; 
-            if (count < totalExpected) {
-                alert("Por favor, responda todas las preguntas antes de enviar.");
+            if (count < 82) {
+                alert(`Has respondido ${count} de 82 preguntas. Por favor, completa todo el cuestionario.`);
                 return;
             }
 
             this.disabled = true;
             this.innerHTML = "ENVIANDO REVISIÓN...";
 
-            let msg = "INFORME DE RESPUESTAS - MARCELO Y MARU\n\n";
+            let msg = "INFORME DE RESPUESTAS - MARCELO Y MARU (82 PREGUNTAS)\n\n";
             let currentQ = 1;
             sectionsData.forEach(section => {
                 msg += `--- ${section.title.toUpperCase()} ---\n`;
@@ -133,7 +135,7 @@
             });
 
             emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                from_name: "Cuestionario Pareja",
+                from_name: "Marcelo y Maru",
                 message: msg,
                 to_email: "erwinborquez.pastor@gmail.com"
             }).then(() => {
@@ -141,8 +143,8 @@
                 document.getElementById('success-screen').classList.remove('hidden');
                 window.scrollTo(0,0);
             }).catch(err => {
-                console.error("Error EmailJS:", err);
-                alert("Hubo un error al enviar el correo. Por favor, intente nuevamente.");
+                console.error("Error:", err);
+                alert("Hubo un error al enviar. Intenta de nuevo.");
                 this.disabled = false;
                 this.innerHTML = "FINALIZAR Y ENVIAR REVISIÓN";
             });
